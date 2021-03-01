@@ -4,6 +4,6 @@ export const light = {
   colors: {
     background: '#f5f5f5',
     text: '#212732',
-    border: '#e2e7ed;',
+    border: '#e2e7ed',
   },
 };

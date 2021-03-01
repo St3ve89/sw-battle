@@ -2,8 +2,8 @@ export const dark = {
   title: 'dark',
 
   colors: {
-    background: '#0e182a',
+    background: '#000',
     text: '#fff',
-    border: '#f7fafc',
+    border: '#FFE81F',
   },
 };

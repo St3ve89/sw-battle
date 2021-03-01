@@ -10,7 +10,7 @@ export const Container = styled.div`
   color: ${({ theme }) => theme.colors.text};
   border: 1px solid ${({ theme }) => theme.colors.border};
   padding: 24px;
-
+  min-width: 300px;
   h2 {
     margin-bottom: 8px;
   }

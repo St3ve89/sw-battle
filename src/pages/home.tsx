@@ -1,19 +1,21 @@
 import { useQuery } from '@apollo/client';
-import React, { CSSProperties, useState } from 'react';
-import { getRandomItemFromArray } from '../helpers/utils';
+import React, { useEffect, useState } from 'react';
+import { generateRandomId, getRandomItemFromArray } from '../helpers/utils';
 import { ALL_PERSON } from '../queries/people';
 import { ALL_STARSHIPS } from '../queries/starships';
 import { IPeople, IStarShips } from '../types/types';
 import Select from 'react-select';
 import { dropdownValue, initialPlayerValue } from '../constants';
 import { Card } from '../components/card';
-import Button from '@material-ui/core/Button';
-import { Grid } from '@material-ui/core';
+import { Box, Grid } from '@material-ui/core';
+import { Container, Button, CustomButtonLink, Title } from './home.style';
+import * as ROUTES from '../constants/routes';
 
 const customStyles = {
   option: (provided: any) => ({
     ...provided,
     color: 'black',
+    fontWeight: 'bold',
   }),
   control: () => ({
     width: 200,
@@ -23,7 +25,11 @@ const customStyles = {
   }),
 };
 
-export default function Home() {
+interface IPropHome {
+  addResult(result: any): void;
+}
+
+const Home: React.FC<IPropHome> = ({ addResult }) => {
   const { data: person, loading: personLoading, error: personError } = useQuery(
     ALL_PERSON
   );
@@ -35,6 +41,17 @@ export default function Home() {
   const [value, setValue] = useState({ value: 'people', label: 'People' });
   const [personOne, setPersonOne] = useState(initialPlayerValue);
   const [personTwo, setPersonTwo] = useState(initialPlayerValue);
+  const randomId = generateRandomId();
+
+  useEffect(() => {
+    if (personOne.name !== '' && personTwo.name !== '') {
+      addResult({
+        personOne,
+        personTwo,
+        id: randomId(),
+      });
+    }
+  }, [personOne, personTwo]);
 
   const handleOnDropdownChange = (target: any) => {
     setValue({ value: target.value, label: target.label });
@@ -50,10 +67,11 @@ export default function Home() {
     if (fightType === 'people') {
       getRandomPeopleOne = getRandomItemFromArray(person.allPeople.people);
       getRandomPeopleTwo = getRandomItemFromArray(person.allPeople.people);
-      setPersonOne({
+      setPersonOne((prevState) => ({
+        ...prevState,
         name: getRandomPeopleOne.name,
         value: getRandomPeopleOne.height,
-      });
+      }));
       setPersonTwo({
         name: getRandomPeopleTwo.name,
         value: getRandomPeopleTwo.height,
@@ -78,64 +96,82 @@ export default function Home() {
 
   const whoWins = () => {
     if (personOne.value > personTwo.value) {
-      return <h1>Player One Wins</h1>;
+      return <Title>Player One Wins</Title>;
     } else if (personOne.value === personTwo.value) {
-      return <h1>The points are equal</h1>;
+      return <Title>The points are equal</Title>;
     } else {
-      return <h1>Player Two Wins</h1>;
+      return <Title>Player Two Wins</Title>;
     }
   };
+
+  if (personLoading || starshipLoading) {
+    return <Title>Your fighters will be loaded soon..</Title>;
+  }
+
+  if (personError || starshipError) {
+    return <Title>Something went wrong!</Title>;
+  }
   return (
-    <>
-      <Select
-        options={dropdownValue}
-        styles={customStyles}
-        onChange={handleOnDropdownChange}
-        value={value}
-      />
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => onClickHandler(value.value)}
-      >
-        Generate fight
-      </Button>
-      {personOne.name !== '' && personTwo.name !== '' ? (
-        <Grid container justify="center" alignItems="center" spacing={2}>
+    <Container>
+      <Box marginBottom={8}>
+        <Grid container spacing={8} alignItems="center" justify="center">
           <Grid item>
-            <Card>
-              <h2>Player One</h2>
-              <h3>Name: {personOne.name}</h3>
-              <h3>
-                {value.value === 'people' ? 'height' : 'hyperdrive-rating'}{' '}
-                {personTwo.value}
-              </h3>
-            </Card>
+            <Select
+              options={dropdownValue}
+              styles={customStyles}
+              onChange={handleOnDropdownChange}
+              value={value}
+            />
           </Grid>
           <Grid item>
-            <h2>VS</h2>
+            <Button
+              onClick={() => onClickHandler(value.value)}
+              data-testId="generateFightButton"
+            >
+              Generate fight
+            </Button>
           </Grid>
           <Grid item>
-            <Card>
-              <h2>Player Two</h2>
-              <h3>Name: {personTwo.name}</h3>
-              <h3>
-                {value.value === 'people' ? 'height' : 'hyperdrive-rating'}{' '}
-                {personTwo.value}
-              </h3>
-            </Card>
-          </Grid>
-          <Grid container justify="center" alignItems="center">
-            <Grid item>{whoWins()}</Grid>
+            <CustomButtonLink to={ROUTES.RESULTS}>See Result</CustomButtonLink>
           </Grid>
         </Grid>
+      </Box>
+      {personOne.name !== '' && personTwo.name !== '' ? (
+        <>
+          <Grid container justify="center" alignItems="center">
+            <Box marginBottom={8}>
+              <Grid item>{whoWins()}</Grid>
+            </Box>
+          </Grid>
+          <Grid container justify="center" alignItems="center" spacing={8}>
+            <Grid item>
+              <Card>
+                <h2>Player One</h2>
+                <h3>Name: {personOne.name}</h3>
+                <h3>
+                  {value.value === 'people' ? 'height' : 'hyperdrive-rating'}{' '}
+                  {personOne.value}
+                </h3>
+              </Card>
+            </Grid>
+            <Grid item>
+              <h2>VS</h2>
+            </Grid>
+            <Grid item>
+              <Card>
+                <h2>Player Two</h2>
+                <h3>Name: {personTwo.name}</h3>
+                <h3>
+                  {value.value === 'people' ? 'height' : 'hyperdrive-rating'}{' '}
+                  {personTwo.value}
+                </h3>
+              </Card>
+            </Grid>
+          </Grid>
+        </>
       ) : null}
-
-      {/* <Grid>
-        <Card></Card>
-
-        <Card></Card>
-      </Grid> */}
-    </>
+    </Container>
   );
-}
+};
+
+export { Home };

@@ -10,3 +10,13 @@ export const Container = styled.div`
   padding: 0 30px;
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 5%);
 `;
+
+export const Logo = styled.div`
+  font-weight: bold;
+  font-size: 35px;
+  color: ${({ theme }) => theme.colors.text};
+
+  @media (max-width: 1030px) {
+    font-size: 18px;
+  }
+`;

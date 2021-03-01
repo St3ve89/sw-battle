@@ -11,5 +11,9 @@ export interface IStarShips {
 }
 
 export interface IPropsForToggle {
-  toggleTheme(): void;
+  toggleTheme?(): void;
+}
+
+export interface IButtonProps {
+  readonly marginBottom?: number;
 }
