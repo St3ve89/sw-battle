@@ -1,46 +1,64 @@
-# Getting Started with Create React App
+# Star Wars Battle Ground
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+You can take a look at the app by visiting https://swbattle.netlify.app/
 
-## Available Scripts
+Note: <p style="color: orange">Please note that the backend of this app is hosted on the free hosting of Heroku, so it may take some time for the server to wake up.</p>
 
-In the project directory, you can run:
+## Description of the project
 
-### `npm start`
+Simple Star Wars game
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+• The user can choose to play with either people or starships.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+• The app makes a GraphQL query to fetch two random resources
+of that type (people/starships).
 
-### `npm test`
+• If the player has chosen people the app compares height else if
+they have chosen starship it compares hyperdrive_rating.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+• The two resources are then rendered on the screen as “cards” with
+some of their attributes displayed and the resource with the highest
+value for that attribute declared the winner.
 
-### `npm run build`
+• The user should then be able to play again using a button that re-
+peats the same request.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+• The user should also be able to go to a route which displays the
+history of the results.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Extras
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+• Add functionality to enable more than two players.
 
-### `npm run eject`
+• Deploy two applications with different colour themes.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## To Run the App Locally
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. Git clone this repository.
+2. Then, in the project root folder, run the below in the terminal:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```bash
+npm start
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+3. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Learn More
+## Tests
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- Test approach: TDD with mainly unit testing
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+How to run tests
+
+```bash
+npm run test
+```
+
+Test Coverage
+
+```bash
+npm run test:coverage
+```
+
+## Other notes
+
+Styling was not a priority for this app.
